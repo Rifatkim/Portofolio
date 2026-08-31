@@ -21,8 +21,8 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
   const major = profile?.major;
 
   return (
-    <section id="home" className="min-h-[calc(100svh-3.5rem)] lg:min-h-screen flex flex-col justify-between lg:justify-end pb-8 sm:pb-12 lg:pb-16 pt-22 sm:pt-26 lg:pt-32 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
-      <div className="w-full">
+    <section id="home" className="min-h-screen flex flex-col justify-between lg:justify-end pb-4 sm:pb-8 lg:pb-16 pt-16 sm:pt-20 lg:pt-32 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
+      <div className="w-full my-auto py-2 lg:my-0 lg:py-0">
         {/* Top bar */}
         <div className="flex items-center justify-between gap-3 mb-5 sm:mb-8 pb-3 sm:pb-4 border-b border-[#e5e5e5] flex-wrap">
           <span className="text-label text-[#737373]">[00] Portfolio</span>
