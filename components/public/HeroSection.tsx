@@ -21,10 +21,10 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
   const major = profile?.major;
 
   return (
-    <section id="home" className="min-h-screen flex items-end pb-12 sm:pb-16 pt-24 sm:pt-28 lg:pt-32 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
+    <section id="home" className="min-h-[calc(100svh-3.5rem)] lg:min-h-screen flex flex-col justify-between lg:justify-end pb-8 sm:pb-12 lg:pb-16 pt-18 sm:pt-20 lg:pt-32 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
       <div className="w-full">
         {/* Top bar */}
-        <div className="flex items-center justify-between gap-3 mb-6 sm:mb-8 pb-4 border-b border-[#e5e5e5] flex-wrap">
+        <div className="flex items-center justify-between gap-3 mb-5 sm:mb-8 pb-3 sm:pb-4 border-b border-[#e5e5e5] flex-wrap">
           <span className="text-label text-[#737373]">[00] Portfolio</span>
           {availability && (
             <span className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-black">
@@ -35,15 +35,15 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
         </div>
 
         {/* Main Content Box with Network Background constrained inside */}
-        <div className="relative overflow-hidden py-2 sm:py-4 mb-6 sm:mb-8">
+        <div className="relative overflow-hidden py-1 sm:py-4 mb-4 sm:mb-8">
           {/* Luxury Network Topology Background (contained strictly within this box) */}
           <HeroNetworkBackground />
 
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 sm:gap-12 items-end">
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 sm:gap-12 items-end">
             {/* Text content */}
             <div>
               {/* Main heading */}
-              <h1 className="font-editorial text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.95] tracking-tight mb-4 sm:mb-6 uppercase break-words">
+              <h1 className="font-editorial text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.95] tracking-tight mb-3 sm:mb-6 uppercase break-words">
                 {name.split(" ").map((word, i) => (
                   <span key={i} className="block">{word}</span>
                 ))}
@@ -51,7 +51,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
 
               {/* Headline */}
               {headline && (
-                <p className="text-sm sm:text-base lg:text-lg font-medium text-[#525252] mb-4 sm:mb-6 max-w-lg leading-snug">
+                <p className="text-sm sm:text-base lg:text-lg font-medium text-[#525252] mb-3 sm:mb-6 max-w-lg leading-snug">
                   {headline}
                 </p>
               )}
@@ -85,22 +85,22 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
 
         {/* Meta grid */}
         {(university || major || (showGpa && gpa)) && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-8 py-4 border-t border-b border-[#e5e5e5]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6 mb-5 sm:mb-8 py-3 sm:py-4 border-t border-b border-[#e5e5e5]">
             {university && (
               <div>
-                <p className="text-label text-[#737373] mb-1">University</p>
+                <p className="text-label text-[#737373] mb-0.5 sm:mb-1">University</p>
                 <p className="text-xs sm:text-sm font-semibold">{university}</p>
               </div>
             )}
             {major && (
               <div>
-                <p className="text-label text-[#737373] mb-1">Major</p>
+                <p className="text-label text-[#737373] mb-0.5 sm:mb-1">Major</p>
                 <p className="text-xs sm:text-sm font-semibold">{major}</p>
               </div>
             )}
             {showGpa && gpa && (
               <div>
-                <p className="text-label text-[#737373] mb-1">GPA</p>
+                <p className="text-label text-[#737373] mb-0.5 sm:mb-1">GPA</p>
                 <p className="text-xs sm:text-sm font-bold font-mono">{gpa} / {gpaScale}</p>
               </div>
             )}
@@ -124,6 +124,25 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
             </a>
           )}
         </div>
+      </div>
+
+      {/* ── Mobile-Only Animated Scroll Down Indicator (Hidden on Desktop) ── */}
+      <div className="lg:hidden flex flex-col items-center justify-center pt-8 pb-2">
+        <a
+          href="#profile"
+          aria-label="Scroll ke bagian profil"
+          className="group flex flex-col items-center gap-1.5 text-black hover:opacity-75 transition-opacity"
+        >
+          <span className="font-editorial text-2xl font-bold tracking-tight text-black">
+            Scroll
+          </span>
+          <svg
+            className="w-7 h-5 animate-bounce text-black fill-current"
+            viewBox="0 0 24 16"
+          >
+            <path d="M12 16L0 0h24L12 16z" />
+          </svg>
+        </a>
       </div>
     </section>
   );
