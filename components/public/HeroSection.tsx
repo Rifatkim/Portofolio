@@ -21,7 +21,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
   const major = profile?.major;
 
   return (
-    <section id="home" className="min-h-[calc(100svh-3.5rem)] lg:min-h-screen flex flex-col justify-between lg:justify-end pb-8 sm:pb-12 lg:pb-16 pt-18 sm:pt-20 lg:pt-32 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
+    <section id="home" className="min-h-[calc(100svh-3.5rem)] lg:min-h-screen flex flex-col justify-between lg:justify-end pb-8 sm:pb-12 lg:pb-16 pt-22 sm:pt-26 lg:pt-32 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
       <div className="w-full">
         {/* Top bar */}
         <div className="flex items-center justify-between gap-3 mb-5 sm:mb-8 pb-3 sm:pb-4 border-b border-[#e5e5e5] flex-wrap">
@@ -126,21 +126,24 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
         </div>
       </div>
 
-      {/* ── Mobile-Only Animated Scroll Down Indicator (Hidden on Desktop) ── */}
-      <div className="lg:hidden flex flex-col items-center justify-center pt-8 pb-2">
+      {/* ── Mobile-Only Animated Scroll Down Indicator (Matching Image 2, Hidden on Desktop) ── */}
+      <div className="lg:hidden flex flex-col items-center justify-center pt-6 pb-2">
         <a
           href="#profile"
           aria-label="Scroll ke bagian profil"
-          className="group flex flex-col items-center gap-1.5 text-black hover:opacity-75 transition-opacity"
+          className="group flex flex-col items-center gap-1 text-[#737373] hover:text-black transition-colors"
         >
-          <span className="font-editorial text-2xl font-bold tracking-tight text-black">
-            Scroll
+          <span className="text-[10px] sm:text-[11px] font-normal tracking-[0.28em] text-[#737373] group-hover:text-black uppercase transition-colors">
+            SCROLL
           </span>
           <svg
-            className="w-7 h-5 animate-bounce text-black fill-current"
-            viewBox="0 0 24 16"
+            className="w-4 h-4 text-[#737373] group-hover:text-black transition-colors animate-bounce"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="1.75"
           >
-            <path d="M12 16L0 0h24L12 16z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
           </svg>
         </a>
       </div>
