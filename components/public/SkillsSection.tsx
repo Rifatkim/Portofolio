@@ -34,11 +34,11 @@ export function SkillsSection({ categories, skills }: SkillsSectionProps) {
       <TechnologyMarquee direction="left" durationMs={40000} />
 
       {/* ── CAPABILITIES Content ─────────────────────────────────────── */}
-      <div className="py-20 px-6 lg:px-12 max-w-7xl mx-auto">
+      <div className="py-16 sm:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
         {/* Section header */}
-        <div className="flex items-start gap-6 mb-12 pb-6 border-b-2 border-foreground">
-          <span className="text-mono text-[#a3a3a3] mt-1">[02]</span>
-          <h2 className="font-editorial text-4xl lg:text-5xl uppercase">CAPABILITIES</h2>
+        <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-foreground">
+          <span className="text-mono text-[#a3a3a3] mt-1 text-xs sm:text-sm">[02]</span>
+          <h2 className="font-editorial text-3xl sm:text-4xl lg:text-5xl uppercase">CAPABILITIES</h2>
         </div>
 
         {/* Interactive skill rows */}

@@ -8,23 +8,23 @@ export function ProfileSection({ profile }: ProfileSectionProps) {
   if (!profile?.full_name && !profile?.detailed_bio) return null;
 
   return (
-    <section id="profile" className="py-20 px-6 lg:px-12 max-w-7xl mx-auto">
+    <section id="profile" className="py-16 sm:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
       {/* Section header */}
-      <div className="flex items-start gap-6 mb-12 pb-6 border-b-2 border-foreground">
-        <span className="text-mono text-[#a3a3a3] mt-1">[01]</span>
-        <h2 className="font-editorial text-4xl lg:text-5xl uppercase">PROFILE</h2>
+      <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-foreground">
+        <span className="text-mono text-[#a3a3a3] mt-1 text-xs sm:text-sm">[01]</span>
+        <h2 className="font-editorial text-3xl sm:text-4xl lg:text-5xl uppercase">PROFILE</h2>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 sm:gap-12">
         {/* Photo */}
         {profile?.profile_photo_url && (
-          <div className="w-full max-w-[240px]">
+          <div className="w-full max-w-[200px] sm:max-w-[240px]">
             <div className="aspect-square overflow-hidden border border-[#e5e5e5]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={profile.profile_photo_url}
                 alt={profile.full_name || "Profile"}
-                className="w-full h-full object-cover img-grayscale"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>

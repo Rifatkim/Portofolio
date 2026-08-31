@@ -12,12 +12,12 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const rest = projects.filter((p) => !p.is_featured);
 
   return (
-    <section id="works" className="py-20 bg-white text-black">
-      <div className="px-6 lg:px-12 max-w-7xl mx-auto">
+    <section id="works" className="py-16 sm:py-20 bg-white text-black">
+      <div className="px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
         {/* Section header */}
-        <div className="flex items-start gap-6 mb-12 pb-6 border-b-2 border-black">
-          <span className="text-mono text-[#a3a3a3] mt-1">[03]</span>
-          <h2 className="font-editorial text-4xl lg:text-5xl uppercase text-black">SELECTED WORKS</h2>
+        <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-black">
+          <span className="text-mono text-[#a3a3a3] mt-1 text-xs sm:text-sm">[03]</span>
+          <h2 className="font-editorial text-3xl sm:text-4xl lg:text-5xl uppercase text-black">SELECTED WORKS</h2>
         </div>
 
         {/* Featured projects */}
@@ -27,20 +27,20 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
               <Link
                 key={project.id}
                 href={`/projects/${project.slug}`}
-                className={`group flex flex-col lg:flex-row gap-6 lg:gap-8 border-b border-[#e5e5e5] p-6 lg:p-8 bg-white hover:bg-black hover:border-black transition-colors duration-250 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black ${
+                className={`group flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 border-b border-[#e5e5e5] p-4 sm:p-6 lg:p-8 bg-white hover:bg-black hover:border-black transition-colors duration-250 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black ${
                   i === 0 ? "border-t border-[#e5e5e5]" : ""
                 }`}
               >
                 {/* Project Number */}
-                <div className="w-12 shrink-0">
-                  <span className="text-mono text-sm font-bold text-[#333333] group-hover:text-white transition-colors duration-250">
+                <div className="w-8 sm:w-12 shrink-0">
+                  <span className="text-mono text-xs sm:text-sm font-bold text-[#333333] group-hover:text-white transition-colors duration-250">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                 </div>
 
                 {/* Project Thumbnail */}
                 {project.thumbnail_url && (
-                  <div className="w-full lg:w-64 h-40 shrink-0 overflow-hidden border border-[#e5e5e5] group-hover:border-[#333333] transition-colors duration-250 bg-[#f5f5f5]">
+                  <div className="w-full lg:w-64 h-48 sm:h-56 lg:h-40 shrink-0 overflow-hidden border border-[#e5e5e5] group-hover:border-[#333333] transition-colors duration-250 bg-[#f5f5f5]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={project.thumbnail_url}

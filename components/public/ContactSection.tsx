@@ -21,18 +21,18 @@ export function ContactSection({ contacts, profile, enabled }: ContactSectionPro
   if (!enabled || contacts.length === 0) return null;
 
   return (
-    <section id="contact" className="bg-foreground text-background py-20">
-      <div className="px-6 lg:px-12 max-w-7xl mx-auto">
+    <section id="contact" className="bg-foreground text-background py-16 sm:py-20">
+      <div className="px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
         {/* Section header */}
-        <div className="flex items-start gap-6 mb-12 pb-6 border-b border-[#333]">
-          <span className="text-mono text-[#555] mt-1">[06]</span>
-          <h2 className="font-editorial text-4xl lg:text-5xl uppercase text-background">CONTACT</h2>
+        <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b border-[#333]">
+          <span className="text-mono text-[#555] mt-1 text-xs sm:text-sm">[06]</span>
+          <h2 className="font-editorial text-3xl sm:text-4xl lg:text-5xl uppercase text-background">CONTACT</h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-start">
           {/* CTA text */}
           <div>
-            <h3 className="font-editorial text-3xl lg:text-4xl uppercase text-background mb-4 leading-tight">
+            <h3 className="font-editorial text-2xl sm:text-3xl lg:text-4xl uppercase text-background mb-3 sm:mb-4 leading-tight">
               Let&apos;s work<br />together.
             </h3>
             {profile?.full_name && (

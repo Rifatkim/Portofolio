@@ -19,18 +19,18 @@ export function ExperienceSection({ experiences }: ExperienceSectionProps) {
   if (experiences.length === 0) return null;
 
   return (
-    <section id="experience" className="py-20 px-6 lg:px-12 max-w-7xl mx-auto">
+    <section id="experience" className="py-16 sm:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
       {/* Section header */}
-      <div className="flex items-start gap-6 mb-12 pb-6 border-b-2 border-foreground">
-        <span className="text-mono text-[#a3a3a3] mt-1">[04]</span>
-        <h2 className="font-editorial text-4xl lg:text-5xl uppercase">EXPERIENCE</h2>
+      <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-foreground">
+        <span className="text-mono text-[#a3a3a3] mt-1 text-xs sm:text-sm">[04]</span>
+        <h2 className="font-editorial text-3xl sm:text-4xl lg:text-5xl uppercase">EXPERIENCE</h2>
       </div>
 
       <div className="space-y-0">
         {experiences.map((exp, i) => (
           <div
             key={exp.id}
-            className={`grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-6 py-8 ${i !== experiences.length - 1 ? "border-b border-[#e5e5e5]" : ""}`}
+            className={`grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-4 sm:gap-6 py-6 sm:py-8 ${i !== experiences.length - 1 ? "border-b border-[#e5e5e5]" : ""}`}
           >
             {/* Left: Date + type */}
             <div className="shrink-0">
