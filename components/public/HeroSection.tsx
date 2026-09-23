@@ -21,10 +21,19 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
   const major = profile?.major;
 
   return (
-    <section id="home" className="w-full min-h-[100dvh] lg:min-h-screen flex flex-col justify-center lg:justify-end pt-14 sm:pt-16 lg:pt-32 pb-4 sm:pb-8 lg:pb-16 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
-      <div className="w-full my-auto py-2 flex flex-col justify-center lg:my-0 lg:py-0">
-        {/* Top bar */}
-        <div className="flex items-center justify-between gap-3 mb-4 sm:mb-8 pb-2.5 sm:pb-4 border-b border-[#e5e5e5] flex-wrap">
+    <section
+      id="home"
+      className="w-full min-h-[100svh] lg:min-h-screen flex flex-col pt-14 sm:pt-16 lg:pt-32 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto"
+    >
+      {/* 
+        Main Hero vertical flex wrapper:
+        - Mobile (< lg): fills remaining viewport (min-h-[calc(100svh-3.5rem)]) and distributes
+          the 5 groups evenly with justify-between so SCROLL indicator sits at the bottom edge.
+        - Desktop (lg+): retains original desktop bottom-anchored layout.
+      */}
+      <div className="w-full flex-1 min-h-[calc(100svh-3.5rem)] lg:min-h-0 flex flex-col justify-between pt-1 sm:pt-2 pb-3 sm:pb-8 lg:pb-16 lg:justify-end lg:flex-none">
+        {/* ── Group A: Hero Top ── */}
+        <div className="flex items-center justify-between gap-3 pb-2 sm:pb-3 border-b border-[#e5e5e5] flex-wrap">
           <span className="text-label text-[#737373]">[00] Portfolio</span>
           {availability && (
             <span className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-black">
@@ -34,8 +43,8 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
           )}
         </div>
 
-        {/* Main Content Box with Network Background constrained inside */}
-        <div className="relative overflow-hidden py-1 sm:py-4 mb-3 sm:mb-8">
+        {/* ── Group B: Hero Identity (Name, Headline, Bio, Photo) ── */}
+        <div className="relative overflow-hidden py-1 sm:py-3 lg:py-4 lg:mb-8">
           {/* Luxury Network Topology Background (contained strictly within this box) */}
           <HeroNetworkBackground />
 
@@ -43,15 +52,15 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
             {/* Text content */}
             <div>
               {/* Main heading */}
-              <h1 className="font-editorial text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.95] tracking-tight mb-2.5 sm:mb-6 uppercase break-words">
+              <h1 className="font-editorial text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.95] tracking-tight mb-3.5 sm:mb-6 uppercase break-words">
                 {name.split(" ").map((word, i) => (
                   <span key={i} className="block">{word}</span>
                 ))}
               </h1>
 
-              {/* Headline */}
+              {/* Headline with clear 14px-24px separation from name */}
               {headline && (
-                <p className="text-sm sm:text-base lg:text-lg font-medium text-[#525252] mb-2.5 sm:mb-6 max-w-lg leading-snug">
+                <p className="text-sm sm:text-base lg:text-lg font-medium text-[#525252] mb-2 sm:mb-4 max-w-lg leading-snug">
                   {headline}
                 </p>
               )}
@@ -83,9 +92,9 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
           </div>
         </div>
 
-        {/* Meta grid */}
+        {/* ── Group C: Hero Information (Meta Grid) ── */}
         {(university || major || (showGpa && gpa)) && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-6 mb-4 sm:mb-8 py-2.5 sm:py-4 border-t border-b border-[#e5e5e5]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-6 py-3 sm:py-4 lg:mb-8 border-t border-b border-[#e5e5e5]">
             {university && (
               <div>
                 <p className="text-label text-[#737373] mb-0.5 sm:mb-1">University</p>
@@ -107,7 +116,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
           </div>
         )}
 
-        {/* CTAs */}
+        {/* ── Group D: Hero Actions (CTA Buttons) ── */}
         <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full sm:w-auto sm:flex sm:flex-wrap sm:items-center">
           <a
             href="#works"
@@ -136,8 +145,8 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
           )}
         </div>
 
-        {/* ── Mobile-Only Animated Scroll Down Indicator (Inside the Centered Unit, Hidden on Desktop) ── */}
-        <div className="lg:hidden flex flex-col items-center justify-center pt-8 pb-1">
+        {/* ── Group E: Hero Scroll (Pinned to bottom of the single mobile screen) ── */}
+        <div className="lg:hidden flex flex-col items-center justify-center pt-3 pb-1">
           <a
             href="#profile"
             aria-label="Scroll ke bagian profil"
