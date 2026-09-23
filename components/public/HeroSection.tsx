@@ -23,17 +23,18 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
   return (
     <section
       id="home"
-      className="w-full min-h-[100svh] lg:min-h-screen flex flex-col pt-14 sm:pt-16 lg:pt-32 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto"
+      className="w-full min-h-[100svh] lg:h-screen lg:max-h-[960px] lg:min-h-[640px] flex flex-col pt-14 sm:pt-16 lg:pt-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-14 sm:scroll-mt-16"
     >
       {/* 
         Main Hero vertical flex wrapper:
         - Mobile (< lg): fills remaining viewport (min-h-[calc(100svh-3.5rem)]) and distributes
           the 5 groups evenly with justify-between so SCROLL indicator sits at the bottom edge.
-        - Desktop (lg+): retains original desktop bottom-anchored layout.
+        - Desktop (lg+): fits within 100vh with justify-between so University, Major, and CTAs are
+          all visible in the first screen without scrolling.
       */}
-      <div className="w-full flex-1 min-h-[calc(100svh-3.5rem)] lg:min-h-0 flex flex-col justify-between pt-5 sm:pt-6 pb-3 sm:pb-8 lg:pb-16 lg:justify-end lg:flex-none">
+      <div className="w-full flex-1 min-h-[calc(100svh-3.5rem)] lg:min-h-0 flex flex-col justify-between pt-5 sm:pt-6 lg:pt-2 pb-3 sm:pb-8 lg:pb-5">
         {/* ── Group A: Hero Top ── */}
-        <div className="flex items-center justify-between gap-3 pb-2 sm:pb-3 border-b border-[#e5e5e5] flex-wrap">
+        <div className="flex items-center justify-between gap-3 pb-2 sm:pb-3 lg:pb-2 border-b border-[#e5e5e5] flex-wrap">
           <span className="text-label text-[#737373]">[00] Portfolio</span>
           {availability && (
             <span className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-black">
@@ -44,7 +45,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
         </div>
 
         {/* ── Group B: Hero Identity (Name, Headline, Bio, Photo) ── */}
-        <div className="relative overflow-hidden py-1 sm:py-3 lg:py-4 lg:mb-8">
+        <div className="relative overflow-hidden py-1 sm:py-3 lg:py-2 lg:mb-2 xl:mb-3">
           {/* Luxury Network Topology Background (contained strictly within this box) */}
           <HeroNetworkBackground />
 
@@ -52,7 +53,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
             {/* Text content */}
             <div>
               {/* Main heading */}
-              <h1 className="font-editorial text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.95] tracking-tight mb-3.5 sm:mb-6 uppercase break-words">
+              <h1 className="font-editorial text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-[3.25rem] xl:text-[4rem] 2xl:text-[4.75rem] leading-[0.95] tracking-tight mb-2.5 sm:mb-4 lg:mb-2.5 uppercase break-words">
                 {name.split(" ").map((word, i) => (
                   <span key={i} className="block">{word}</span>
                 ))}
@@ -60,7 +61,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
 
               {/* Headline with clear 14px-24px separation from name */}
               {headline && (
-                <p className="text-sm sm:text-base lg:text-lg font-medium text-[#525252] mb-2 sm:mb-4 max-w-lg leading-snug">
+                <p className="text-sm sm:text-base lg:text-base font-medium text-[#525252] mb-1.5 sm:mb-3 lg:mb-2 max-w-lg leading-snug">
                   {headline}
                 </p>
               )}
@@ -73,7 +74,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
 
             {/* Photo */}
             {heroPhoto && (
-              <div className="hidden lg:block w-64 xl:w-80 shrink-0">
+              <div className="hidden lg:block w-44 xl:w-52 2xl:w-60 shrink-0">
                 <div className="aspect-[3/4] overflow-hidden border border-[#e5e5e5] bg-[#f9f9f9]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -84,8 +85,8 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
                 </div>
                 {/* Caption */}
                 <div className="mt-2 flex items-center justify-between">
-                  <span className="text-mono text-[#a3a3a3] text-[10px]">RIFAT.JPG</span>
-                  <span className="text-mono text-[#a3a3a3] text-[10px]">2026</span>
+                  <span className="text-mono text-[#737373] text-[10px]">RIFAT.JPG</span>
+                  <span className="text-mono text-[#737373] text-[10px]">2026</span>
                 </div>
               </div>
             )}
@@ -94,7 +95,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
 
         {/* ── Group C: Hero Information (Meta Grid) ── */}
         {(university || major || (showGpa && gpa)) && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-6 py-3 sm:py-4 lg:mb-8 border-t border-b border-[#e5e5e5]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-6 py-2.5 sm:py-3 lg:py-2.5 lg:mb-2 xl:mb-3 border-t border-b border-[#e5e5e5]">
             {university && (
               <div>
                 <p className="text-label text-[#737373] mb-0.5 sm:mb-1">University</p>
@@ -120,13 +121,13 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
         <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full sm:w-auto sm:flex sm:flex-wrap sm:items-center">
           <a
             href="#works"
-            className="btn-primary text-xs sm:text-sm text-center justify-center h-10 sm:h-11 px-3 sm:px-5"
+            className="btn-primary text-xs sm:text-sm text-center justify-center min-h-10 sm:min-h-11 h-10 sm:h-11 px-3 sm:px-5"
           >
             View My Work
           </a>
           <a
             href="#contact"
-            className="btn-secondary text-xs sm:text-sm text-center justify-center h-10 sm:h-11 px-3 sm:px-5"
+            className="btn-secondary text-xs sm:text-sm text-center justify-center min-h-10 sm:min-h-11 h-10 sm:h-11 px-3 sm:px-5"
           >
             Get in Touch
           </a>
@@ -135,7 +136,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
               href={cvUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 h-10 sm:h-11 px-3 sm:px-5"
+              className="btn-secondary text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 min-h-10 sm:min-h-11 h-10 sm:h-11 px-3 sm:px-5"
             >
               <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
@@ -150,7 +151,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
           <a
             href="#profile"
             aria-label="Scroll ke bagian profil"
-            className="group flex flex-col items-center gap-1 text-[#737373] hover:text-black transition-colors"
+            className="group min-h-11 min-w-11 px-3 flex flex-col items-center justify-center gap-1 text-[#737373] hover:text-black transition-colors"
           >
             <span className="text-[10px] sm:text-[11px] font-normal tracking-[0.28em] text-[#737373] group-hover:text-black uppercase transition-colors">
               SCROLL

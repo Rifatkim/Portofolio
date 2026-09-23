@@ -1,6 +1,7 @@
 import { Skill, SkillCategory } from "@/types";
 import { SkillsInteractive } from "./SkillsInteractive";
 import { TechnologyMarquee } from "./TechnologyMarquee";
+import { Reveal } from "./Reveal";
 
 interface SkillsSectionProps {
   categories: SkillCategory[];
@@ -29,24 +30,28 @@ export function SkillsSection({ categories, skills }: SkillsSectionProps) {
   ];
 
   return (
-    <section id="capabilities" className="w-full bg-[#f7f7f5]">
+    <section id="capabilities" className="w-full bg-[#f7f7f5] scroll-mt-14 sm:scroll-mt-16">
       {/* ── Top Marquee (left → right) ───────────────────────────────── */}
       <TechnologyMarquee direction="left" durationMs={40000} />
 
       {/* ── CAPABILITIES Content ─────────────────────────────────────── */}
       <div className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
         {/* Section header */}
-        <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-foreground">
-          <span className="text-mono text-[#a3a3a3] mt-1 text-xs sm:text-sm">[02]</span>
-          <h2 className="font-editorial text-3xl sm:text-4xl lg:text-5xl uppercase">CAPABILITIES</h2>
-        </div>
+        <Reveal>
+          <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-foreground">
+            <span className="text-mono text-[#737373] mt-1 text-xs sm:text-sm">[02]</span>
+            <h2 className="font-editorial text-3xl sm:text-4xl lg:text-5xl uppercase">CAPABILITIES</h2>
+          </div>
+        </Reveal>
 
         {/* Interactive skill rows */}
-        <SkillsInteractive
-          categories={displayCategories}
-          grouped={grouped}
-          uncategorized={uncategorized}
-        />
+        <Reveal delayMs={150}>
+          <SkillsInteractive
+            categories={displayCategories}
+            grouped={grouped}
+            uncategorized={uncategorized}
+          />
+        </Reveal>
       </div>
 
       {/* ── Bottom Marquee (right → left) ────────────────────────────── */}

@@ -1,4 +1,5 @@
 import { Profile } from "@/types";
+import { Reveal } from "./Reveal";
 
 interface ProfileSectionProps {
   profile: Profile | null;
@@ -8,17 +9,19 @@ export function ProfileSection({ profile }: ProfileSectionProps) {
   if (!profile?.full_name && !profile?.detailed_bio) return null;
 
   return (
-    <section id="profile" className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
+    <section id="profile" className="w-full pt-6 pb-16 sm:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-14 sm:scroll-mt-16">
       {/* Section header */}
-      <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-foreground">
-        <span className="text-mono text-[#a3a3a3] mt-1 text-xs sm:text-sm">[01]</span>
-        <h2 className="font-editorial text-3xl sm:text-4xl lg:text-5xl uppercase">PROFILE</h2>
-      </div>
+      <Reveal>
+        <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-foreground">
+          <span className="text-mono text-[#737373] mt-1 text-xs sm:text-sm">[01]</span>
+          <h2 className="font-editorial text-3xl sm:text-4xl lg:text-5xl uppercase">PROFILE</h2>
+        </div>
+      </Reveal>
 
       <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 sm:gap-12">
         {/* Photo */}
         {profile?.profile_photo_url && (
-          <div className="w-full max-w-[200px] sm:max-w-[240px]">
+          <Reveal delayMs={100} className="w-full max-w-[200px] sm:max-w-[240px]">
             <div className="aspect-square overflow-hidden border border-[#e5e5e5]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -27,59 +30,63 @@ export function ProfileSection({ profile }: ProfileSectionProps) {
                 className="w-full h-full object-cover"
               />
             </div>
-          </div>
+          </Reveal>
         )}
 
         {/* Info */}
         <div className="space-y-8">
           {/* Key facts */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {profile?.full_name && (
-              <div>
-                <p className="text-label text-[#737373] mb-1">Name</p>
-                <p className="text-sm font-semibold">{profile.full_name}</p>
-              </div>
-            )}
-            {profile?.university && (
-              <div>
-                <p className="text-label text-[#737373] mb-1">University</p>
-                <p className="text-sm font-semibold">{profile.university}</p>
-              </div>
-            )}
-            {profile?.major && (
-              <div>
-                <p className="text-label text-[#737373] mb-1">Major</p>
-                <p className="text-sm font-semibold">{profile.major}</p>
-              </div>
-            )}
-            {profile?.location && (
-              <div>
-                <p className="text-label text-[#737373] mb-1">Location</p>
-                <p className="text-sm font-semibold">{profile.location}</p>
-              </div>
-            )}
-            {profile?.show_gpa && profile?.gpa && (
-              <div>
-                <p className="text-label text-[#737373] mb-1">GPA</p>
-                <p className="text-sm font-bold font-mono">{profile.gpa} / {profile.gpa_scale || 4}</p>
-              </div>
-            )}
-            {profile?.availability_status && (
-              <div>
-                <p className="text-label text-[#737373] mb-1">Status</p>
-                <p className="text-sm font-semibold capitalize">{profile.availability_status.replace("_", " ")}</p>
-              </div>
-            )}
-          </div>
+          <Reveal delayMs={150}>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              {profile?.full_name && (
+                <div>
+                  <p className="text-label text-[#737373] mb-1">Name</p>
+                  <p className="text-sm font-semibold">{profile.full_name}</p>
+                </div>
+              )}
+              {profile?.university && (
+                <div>
+                  <p className="text-label text-[#737373] mb-1">University</p>
+                  <p className="text-sm font-semibold">{profile.university}</p>
+                </div>
+              )}
+              {profile?.major && (
+                <div>
+                  <p className="text-label text-[#737373] mb-1">Major</p>
+                  <p className="text-sm font-semibold">{profile.major}</p>
+                </div>
+              )}
+              {profile?.location && (
+                <div>
+                  <p className="text-label text-[#737373] mb-1">Location</p>
+                  <p className="text-sm font-semibold">{profile.location}</p>
+                </div>
+              )}
+              {profile?.show_gpa && profile?.gpa && (
+                <div>
+                  <p className="text-label text-[#737373] mb-1">GPA</p>
+                  <p className="text-sm font-bold font-mono">{profile.gpa} / {profile.gpa_scale || 4}</p>
+                </div>
+              )}
+              {profile?.availability_status && (
+                <div>
+                  <p className="text-label text-[#737373] mb-1">Status</p>
+                  <p className="text-sm font-semibold capitalize">{profile.availability_status.replace("_", " ")}</p>
+                </div>
+              )}
+            </div>
+          </Reveal>
 
           {/* Bio */}
           {profile?.detailed_bio && (
-            <div>
-              <p className="text-label text-[#737373] mb-3">About</p>
-              <p className="text-sm leading-relaxed text-[#525252] max-w-2xl whitespace-pre-wrap">
-                {profile.detailed_bio}
-              </p>
-            </div>
+            <Reveal delayMs={200}>
+              <div>
+                <p className="text-label text-[#737373] mb-3">About</p>
+                <p className="text-sm leading-relaxed text-[#525252] max-w-2xl whitespace-pre-wrap">
+                  {profile.detailed_bio}
+                </p>
+              </div>
+            </Reveal>
           )}
         </div>
       </div>

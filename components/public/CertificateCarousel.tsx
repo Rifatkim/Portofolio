@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Certificate } from "@/types";
 import { formatDate } from "@/lib/utils";
 import { ArrowLeft, ArrowRight, ExternalLink, Download } from "lucide-react";
+import { ImageLightbox, LightboxImage } from "./ImageLightbox";
 
 interface CertificateCarouselProps {
   certificates: Certificate[];
@@ -14,11 +15,35 @@ export function CertificateCarousel({ certificates }: CertificateCarouselProps) 
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [windowWidth, setWindowWidth] = useState(1024);
 
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const activeTriggerRef = useRef<HTMLElement | null>(null);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
   const total = certificates.length;
+
+  // Build lightbox image collection
+  const certsWithImage = certificates.filter((c) => c.thumbnail_url || c.image_url);
+  const lightboxImages: LightboxImage[] = certsWithImage.map((c) => ({
+    url: (c.image_url || c.thumbnail_url)!,
+    alt: c.name,
+    caption: `${c.name} — ${c.issuer}`,
+  }));
+
+  const openLightboxForCert = (cert: Certificate, e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    const imgUrl = cert.image_url || cert.thumbnail_url;
+    const idx = certsWithImage.findIndex((c) => (c.image_url || c.thumbnail_url) === imgUrl);
+    if (idx !== -1) {
+      activeTriggerRef.current = e.currentTarget as HTMLElement;
+      setLightboxIndex(idx);
+      setLightboxOpen(true);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -49,6 +74,7 @@ export function CertificateCarousel({ certificates }: CertificateCarouselProps) 
   // Keyboard navigation
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      if (lightboxOpen) return; // Don't interfere if lightbox is open
       if (e.key === "ArrowLeft") {
         e.preventDefault();
         goToPrev();
@@ -57,16 +83,18 @@ export function CertificateCarousel({ certificates }: CertificateCarouselProps) 
         goToNext();
       }
     },
-    [goToPrev, goToNext]
+    [goToPrev, goToNext, lightboxOpen]
   );
 
   // Touch Swipe handlers
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (lightboxOpen) return;
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    if (lightboxOpen) return;
     if (touchStartX.current === null || touchStartY.current === null) return;
     const deltaX = e.changedTouches[0].clientX - touchStartX.current;
     const deltaY = e.changedTouches[0].clientY - touchStartY.current;
@@ -87,79 +115,109 @@ export function CertificateCarousel({ certificates }: CertificateCarouselProps) 
   // Single Certificate
   if (total === 1) {
     const cert = certificates[0];
+    const hasImage = Boolean(cert.thumbnail_url || cert.image_url);
+
     return (
-      <div className="flex justify-center my-6">
-        <div className="w-full max-w-[440px] bg-white border border-black shadow-sm overflow-hidden">
-          {cert.thumbnail_url && (
-            <div className="aspect-video w-full overflow-hidden border-b border-[#e5e5e5] bg-[#f9f9f9]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={cert.thumbnail_url}
-                alt={cert.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
-          <div className="p-4 sm:p-5">
-            <p className="text-mono text-[#a3a3a3] text-[10px] sm:text-xs uppercase mb-1">{cert.issuer}</p>
-            <h3 className="font-bold text-sm sm:text-base uppercase tracking-wide mb-2 leading-tight">
-              {cert.name}
-            </h3>
-            <div className="flex items-center gap-2.5 text-[11px] text-[#737373] mb-3">
-              {cert.issue_date && (
-                <span>{formatDate(cert.issue_date, { month: "short", year: "numeric" })}</span>
-              )}
-              {cert.does_not_expire ? (
-                <span className="font-mono">No expiry</span>
-              ) : cert.expiration_date ? (
-                <span>— {formatDate(cert.expiration_date, { month: "short", year: "numeric" })}</span>
-              ) : null}
-            </div>
-            {cert.related_skills && cert.related_skills.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-3">
-                {cert.related_skills.slice(0, 4).map((skill) => (
-                  <span
-                    key={skill}
-                    className="text-[10px] border border-[#e5e5e5] px-2 py-0.5 font-mono text-[#525252] uppercase"
-                  >
-                    {skill}
+      <>
+        <div className="flex justify-center my-6">
+          <div className="w-full max-w-[440px] bg-white border border-black shadow-sm overflow-hidden">
+            {hasImage && (
+              <div
+                role="button"
+                tabIndex={0}
+                aria-label={`Buka sertifikat ${cert.name} di layar penuh`}
+                onClick={(e) => openLightboxForCert(cert, e)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    openLightboxForCert(cert, e);
+                  }
+                }}
+                className="aspect-video w-full overflow-hidden border-b border-[#e5e5e5] bg-[#f9f9f9] relative cursor-pointer group/img focus-visible:outline focus-visible:outline-2 focus-visible:outline-black"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={cert.thumbnail_url || cert.image_url || ""}
+                  alt={cert.name}
+                  className="w-full h-full object-cover group-hover/img:scale-[1.02] transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/10 transition-colors flex items-center justify-center">
+                  <span className="opacity-0 group-hover/img:opacity-100 transition-opacity bg-black/75 text-white text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-xs">
+                    View
                   </span>
-                ))}
+                </div>
               </div>
             )}
-            <div className="flex items-center justify-between pt-3 border-t border-[#e5e5e5]">
-              <div className="flex items-center gap-4">
-                {cert.credential_url && (
-                  <a
-                    href={cert.credential_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider hover:opacity-60 transition-opacity"
-                  >
-                    <span>Verify</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
+            <div className="p-4 sm:p-5">
+              <p className="text-mono text-[#737373] text-[10px] sm:text-xs uppercase mb-1">{cert.issuer}</p>
+              <h3 className="font-bold text-sm sm:text-base uppercase tracking-wide mb-2 leading-tight">
+                {cert.name}
+              </h3>
+              <div className="flex items-center gap-2.5 text-[11px] text-[#737373] mb-3">
+                {cert.issue_date && (
+                  <span>{formatDate(cert.issue_date, { month: "short", year: "numeric" })}</span>
                 )}
-                {cert.allow_download && cert.pdf_url && (
-                  <a
-                    href={cert.pdf_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download
-                    className="group inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider hover:opacity-60 transition-opacity"
-                  >
-                    <span>Download PDF</span>
-                    <Download className="w-3 h-3" />
-                  </a>
+                {cert.does_not_expire ? (
+                  <span className="font-mono">No expiry</span>
+                ) : cert.expiration_date ? (
+                  <span>— {formatDate(cert.expiration_date, { month: "short", year: "numeric" })}</span>
+                ) : null}
+              </div>
+              {cert.related_skills && cert.related_skills.length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {cert.related_skills.slice(0, 4).map((skill) => (
+                    <span
+                      key={skill}
+                      className="text-[10px] border border-[#e5e5e5] px-2 py-0.5 font-mono text-[#525252] uppercase"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div className="flex items-center justify-between pt-3 border-t border-[#e5e5e5]">
+                <div className="flex items-center gap-4">
+                  {cert.credential_url && (
+                    <a
+                      href={cert.credential_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider hover:opacity-60 transition-opacity"
+                    >
+                      <span>Verify</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                  {cert.allow_download && cert.pdf_url && (
+                    <a
+                      href={cert.pdf_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className="group inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider hover:opacity-60 transition-opacity"
+                    >
+                      <span>Download PDF</span>
+                      <Download className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
+                {cert.show_credential_id && cert.credential_id && (
+                  <span className="text-[10px] font-mono text-[#737373]">#{cert.credential_id}</span>
                 )}
               </div>
-              {cert.show_credential_id && cert.credential_id && (
-                <span className="text-[10px] font-mono text-[#a3a3a3]">#{cert.credential_id}</span>
-              )}
             </div>
           </div>
         </div>
-      </div>
+
+        <ImageLightbox
+          images={lightboxImages}
+          currentIndex={lightboxIndex}
+          isOpen={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+          onNavigate={(idx) => setLightboxIndex(idx)}
+          triggerRef={activeTriggerRef}
+        />
+      </>
     );
   }
 
@@ -227,187 +285,226 @@ export function CertificateCarousel({ certificates }: CertificateCarouselProps) 
   };
 
   return (
-    <div
-      ref={containerRef}
-      tabIndex={0}
-      role="region"
-      aria-label="Certifications carousel"
-      onKeyDown={handleKeyDown}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      className="relative w-full py-2 focus:outline-none"
-    >
-      {/* Carousel Sliding Stage */}
-      <div className="relative flex items-center justify-center min-h-[420px] sm:min-h-[460px] md:min-h-[480px] overflow-hidden px-2 sm:px-6">
-        {certificates.map((cert, index) => {
-          let offset = (index - activeIndex + total) % total;
-          if (offset > total / 2) offset -= total;
-          const isActive = offset === 0;
-          const isPrev = offset === -1 || (total === 2 && offset === 1 && activeIndex === 1);
-          const isNext = offset === 1 && total > 2;
-          const cardStyle = getCardStyle(index);
+    <>
+      <div
+        ref={containerRef}
+        tabIndex={0}
+        role="region"
+        aria-label="Certifications carousel"
+        onKeyDown={handleKeyDown}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="relative w-full py-2 focus:outline-none"
+      >
+        {/* Carousel Sliding Stage */}
+        <div className="relative flex items-center justify-center min-h-[420px] sm:min-h-[460px] md:min-h-[480px] overflow-hidden px-2 sm:px-6">
+          {certificates.map((cert, index) => {
+            let offset = (index - activeIndex + total) % total;
+            if (offset > total / 2) offset -= total;
+            const isActive = offset === 0;
+            const isPrev = offset === -1 || (total === 2 && offset === 1 && activeIndex === 1);
+            const isNext = offset === 1 && total > 2;
+            const cardStyle = getCardStyle(index);
+            const hasImage = Boolean(cert.thumbnail_url || cert.image_url);
 
-          const handleCardClick = () => {
-            if (isPrev) goToPrev();
-            else if (isNext) goToNext();
-          };
+            const handleCardClick = () => {
+              if (isPrev) goToPrev();
+              else if (isNext) goToNext();
+            };
 
-          return (
-            <div
-              key={cert.id}
-              onClick={handleCardClick}
-              role={isActive ? "group" : "button"}
-              tabIndex={isActive ? -1 : 0}
-              aria-label={
-                isActive
-                  ? `Active certificate: ${cert.name}`
-                  : isPrev
-                  ? `Go to previous certificate: ${cert.name}`
-                  : `Go to next certificate: ${cert.name}`
-              }
-              onKeyDown={(e) => {
-                if (!isActive && (e.key === "Enter" || e.key === " ")) {
-                  e.preventDefault();
-                  handleCardClick();
-                }
-              }}
-              style={{
-                ...cardStyle,
-                transition: prefersReducedMotion
-                  ? "opacity 200ms ease"
-                  : "transform 550ms cubic-bezier(0.22, 1, 0.36, 1), opacity 500ms cubic-bezier(0.22, 1, 0.36, 1)",
-                willChange: "transform, opacity",
-              }}
-              className={`absolute w-[90vw] sm:w-[380px] md:w-[420px] lg:w-[440px] bg-white border ${
-                isActive ? "border-black shadow-md" : "border-[#e5e5e5] cursor-pointer hover:opacity-75 shadow-sm"
-              } transition-colors select-none`}
-            >
-              {/* Certificate Image */}
-              {cert.thumbnail_url && (
-                <div className="aspect-video w-full overflow-hidden border-b border-[#e5e5e5] bg-[#f9f9f9]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={cert.thumbnail_url}
-                    alt={cert.name}
-                    className="w-full h-full object-cover pointer-events-none"
-                  />
-                </div>
-              )}
-
-              {/* Active Card Body Details (Smoothly reveals when active) */}
+            return (
               <div
-                className={`p-4 sm:p-5 transition-opacity duration-300 ${
-                  isActive ? "opacity-100" : "opacity-60"
-                }`}
+                key={cert.id}
+                onClick={handleCardClick}
+                role={isActive ? "group" : "button"}
+                tabIndex={isActive ? -1 : 0}
+                aria-label={
+                  isActive
+                    ? `Active certificate: ${cert.name}`
+                    : isPrev
+                    ? `Go to previous certificate: ${cert.name}`
+                    : `Go to next certificate: ${cert.name}`
+                }
+                onKeyDown={(e) => {
+                  if (!isActive && (e.key === "Enter" || e.key === " ")) {
+                    e.preventDefault();
+                    handleCardClick();
+                  }
+                }}
+                style={{
+                  ...cardStyle,
+                  transition: prefersReducedMotion
+                    ? "opacity 200ms ease"
+                    : "transform 550ms cubic-bezier(0.22, 1, 0.36, 1), opacity 500ms cubic-bezier(0.22, 1, 0.36, 1)",
+                  willChange: "transform, opacity",
+                }}
+                className={`absolute w-[90vw] sm:w-[380px] md:w-[420px] lg:w-[440px] bg-white border ${
+                  isActive ? "border-black shadow-md" : "border-[#e5e5e5] cursor-pointer hover:opacity-75 shadow-sm"
+                } transition-colors select-none`}
               >
-                <p className="text-mono text-[#a3a3a3] text-[10px] sm:text-xs uppercase mb-1 tracking-wider">
-                  {cert.issuer}
-                </p>
-
-                <h3 className="font-bold text-sm sm:text-base uppercase tracking-wide mb-2 leading-tight text-black line-clamp-2">
-                  {cert.name}
-                </h3>
-
-                <div className="flex items-center gap-2.5 text-[11px] text-[#737373] mb-3">
-                  {cert.issue_date && (
-                    <span>{formatDate(cert.issue_date, { month: "short", year: "numeric" })}</span>
-                  )}
-                  {cert.does_not_expire ? (
-                    <span className="font-mono">No expiry</span>
-                  ) : cert.expiration_date ? (
-                    <span>— {formatDate(cert.expiration_date, { month: "short", year: "numeric" })}</span>
-                  ) : null}
-                </div>
-
-                {/* Related Skills Tags */}
-                {cert.related_skills && cert.related_skills.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {cert.related_skills.slice(0, 4).map((skill) => (
-                      <span
-                        key={skill}
-                        className="text-[10px] border border-[#e5e5e5] px-2 py-0.5 font-mono text-[#525252] uppercase"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                {/* Certificate Image */}
+                {hasImage && (
+                  <div
+                    role={isActive ? "button" : undefined}
+                    tabIndex={isActive ? 0 : -1}
+                    aria-label={isActive ? `Buka gambar ${cert.name} di layar penuh` : undefined}
+                    onClick={(e) => {
+                      if (isActive) {
+                        openLightboxForCert(cert, e);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (isActive && (e.key === "Enter" || e.key === " ")) {
+                        e.preventDefault();
+                        openLightboxForCert(cert, e);
+                      }
+                    }}
+                    className={`aspect-video w-full overflow-hidden border-b border-[#e5e5e5] bg-[#f9f9f9] relative ${
+                      isActive ? "cursor-pointer group/img focus-visible:outline focus-visible:outline-2 focus-visible:outline-black" : "pointer-events-none"
+                    }`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={cert.thumbnail_url || cert.image_url || ""}
+                      alt={cert.name}
+                      className="w-full h-full object-cover group-hover/img:scale-[1.02] transition-transform duration-300"
+                    />
+                    {isActive && (
+                      <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/10 transition-colors flex items-center justify-center">
+                        <span className="opacity-0 group-hover/img:opacity-100 transition-opacity bg-black/75 text-white text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-xs">
+                          View
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )}
 
-                {/* Actions Row (Enabled when active) */}
+                {/* Active Card Body Details (Smoothly reveals when active) */}
                 <div
-                  className={`flex items-center justify-between pt-3 border-t border-[#e5e5e5] ${
-                    isActive ? "pointer-events-auto" : "pointer-events-none"
+                  className={`p-4 sm:p-5 transition-opacity duration-300 ${
+                    isActive ? "opacity-100" : "opacity-60"
                   }`}
                 >
-                  <div className="flex items-center gap-4">
-                    {cert.credential_url && (
-                      <a
-                        href={cert.credential_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider hover:opacity-60 transition-opacity"
-                        aria-label={`Verify credential for ${cert.name}`}
-                      >
-                        <span>Verify</span>
-                        <ExternalLink className="w-3 h-3 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
-                      </a>
+                  <p className="text-mono text-[#737373] text-[10px] sm:text-xs uppercase mb-1 tracking-wider">
+                    {cert.issuer}
+                  </p>
+
+                  <h3 className="font-bold text-sm sm:text-base uppercase tracking-wide mb-2 leading-tight text-black line-clamp-2">
+                    {cert.name}
+                  </h3>
+
+                  <div className="flex items-center gap-2.5 text-[11px] text-[#737373] mb-3">
+                    {cert.issue_date && (
+                      <span>{formatDate(cert.issue_date, { month: "short", year: "numeric" })}</span>
                     )}
-                    {cert.allow_download && cert.pdf_url && (
-                      <a
-                        href={cert.pdf_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        download
-                        className="group inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider hover:opacity-60 transition-opacity"
-                        aria-label={`Download PDF certificate for ${cert.name}`}
-                      >
-                        <span>Download PDF</span>
-                        <Download className="w-3 h-3 transform group-hover:translate-y-0.5 transition-transform duration-200" />
-                      </a>
-                    )}
+                    {cert.does_not_expire ? (
+                      <span className="font-mono">No expiry</span>
+                    ) : cert.expiration_date ? (
+                      <span>— {formatDate(cert.expiration_date, { month: "short", year: "numeric" })}</span>
+                    ) : null}
                   </div>
 
-                  {cert.show_credential_id && cert.credential_id && (
-                    <span className="text-[10px] font-mono text-[#a3a3a3] tracking-wider">
-                      #{cert.credential_id}
-                    </span>
+                  {/* Related Skills Tags */}
+                  {cert.related_skills && cert.related_skills.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {cert.related_skills.slice(0, 4).map((skill) => (
+                        <span
+                          key={skill}
+                          className="text-[10px] border border-[#e5e5e5] px-2 py-0.5 font-mono text-[#525252] uppercase"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   )}
+
+                  {/* Actions Row (Enabled when active) */}
+                  <div
+                    className={`flex items-center justify-between pt-3 border-t border-[#e5e5e5] ${
+                      isActive ? "pointer-events-auto" : "pointer-events-none"
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      {cert.credential_url && (
+                        <a
+                          href={cert.credential_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider hover:opacity-60 transition-opacity"
+                          aria-label={`Verify credential for ${cert.name}`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <span>Verify</span>
+                          <ExternalLink className="w-3 h-3 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                        </a>
+                      )}
+                      {cert.allow_download && cert.pdf_url && (
+                        <a
+                          href={cert.pdf_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          download
+                          className="group inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider hover:opacity-60 transition-opacity"
+                          aria-label={`Download PDF certificate for ${cert.name}`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <span>Download PDF</span>
+                          <Download className="w-3 h-3 transform group-hover:translate-y-0.5 transition-transform duration-200" />
+                        </a>
+                      )}
+                    </div>
+
+                    {cert.show_credential_id && cert.credential_id && (
+                      <span className="text-[10px] font-mono text-[#737373] tracking-wider">
+                        #{cert.credential_id}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
+            );
+          })}
+        </div>
+
+        {/* Navigation Arrows & Counter */}
+        {total > 1 && (
+          <div className="flex items-center justify-between max-w-sm sm:max-w-md mx-auto mt-6 px-4">
+            <button
+              type="button"
+              onClick={goToPrev}
+              aria-label="Previous certificate"
+              className="group w-12 h-12 flex items-center justify-center border border-black bg-white text-black hover:bg-black hover:text-white active:scale-95 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2"
+            >
+              <ArrowLeft className="w-5 h-5 transform group-hover:-translate-x-0.5 transition-transform duration-200 ease-out" />
+            </button>
+
+            {/* Clean Editorial Slide Counter */}
+            <div className="font-mono text-xs text-[#737373] tracking-widest uppercase">
+              <span>{String(activeIndex + 1).padStart(2, "0")}</span>
+              <span className="mx-2 text-[#ccc]">/</span>
+              <span>{String(total).padStart(2, "0")}</span>
             </div>
-          );
-        })}
+
+            <button
+              type="button"
+              onClick={goToNext}
+              aria-label="Next certificate"
+              className="group w-12 h-12 flex items-center justify-center border border-black bg-white text-black hover:bg-black hover:text-white active:scale-95 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2"
+            >
+              <ArrowRight className="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform duration-200 ease-out" />
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Navigation Arrows & Counter */}
-      {total > 1 && (
-        <div className="flex items-center justify-between max-w-sm sm:max-w-md mx-auto mt-6 px-4">
-          <button
-            type="button"
-            onClick={goToPrev}
-            aria-label="Previous certificate"
-            className="group w-12 h-12 flex items-center justify-center border border-black bg-white text-black hover:bg-black hover:text-white transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2"
-          >
-            <ArrowLeft className="w-5 h-5 transform group-hover:-translate-x-0.5 transition-transform duration-200 ease-out" />
-          </button>
-
-          {/* Clean Editorial Slide Counter */}
-          <div className="font-mono text-xs text-[#737373] tracking-widest uppercase">
-            <span>{String(activeIndex + 1).padStart(2, "0")}</span>
-            <span className="mx-2 text-[#ccc]">/</span>
-            <span>{String(total).padStart(2, "0")}</span>
-          </div>
-
-          <button
-            type="button"
-            onClick={goToNext}
-            aria-label="Next certificate"
-            className="group w-12 h-12 flex items-center justify-center border border-black bg-white text-black hover:bg-black hover:text-white transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2"
-          >
-            <ArrowRight className="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform duration-200 ease-out" />
-          </button>
-        </div>
-      )}
-    </div>
+      <ImageLightbox
+        images={lightboxImages}
+        currentIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onNavigate={(idx) => setLightboxIndex(idx)}
+        triggerRef={activeTriggerRef}
+      />
+    </>
   );
 }

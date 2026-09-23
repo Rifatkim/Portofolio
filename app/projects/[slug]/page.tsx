@@ -3,6 +3,7 @@ import { getProjectBySlug } from "@/lib/actions/projects.actions";
 import { formatDate } from "@/lib/utils";
 import { ExternalLink, Code2 } from "lucide-react";
 import { ProjectDetailHeader } from "@/components/public/ProjectDetailHeader";
+import { ProjectGallery } from "@/components/public/ProjectGallery";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -37,7 +38,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {/* Header */}
         <div className="mb-12 pb-8 border-b-2 border-foreground">
           {project.category && (
-            <p className="text-mono text-[#a3a3a3] mb-3 uppercase">{project.category}</p>
+            <p className="text-mono text-[#737373] mb-3 uppercase">{project.category}</p>
           )}
           <h1 className="font-editorial text-4xl lg:text-6xl uppercase tracking-tight mb-4">{project.name}</h1>
           {project.short_summary && (
@@ -125,7 +126,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <ul className="space-y-2">
                 {project.key_features.map((feat, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-[#525252]">
-                    <span className="text-mono text-[#a3a3a3] shrink-0">→</span>
+                    <span className="text-mono text-[#737373] shrink-0">→</span>
                     {feat}
                   </li>
                 ))}
@@ -146,35 +147,22 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           )}
         </div>
 
-        {/* Gallery */}
+        {/* Gallery with Image Lightbox */}
         {project.images && project.images.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-xs font-bold uppercase tracking-widest mb-4 pb-2 border-b border-[#e5e5e5]">Gallery</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {project.images.map((img) => (
-                <div key={img.id} className="border border-[#e5e5e5] overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img.image_url} alt={img.alt_text || project.name} className="w-full object-cover" />
-                  {img.caption && (
-                    <p className="px-3 py-2 text-xs text-[#737373]">{img.caption}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          <ProjectGallery images={project.images} projectName={project.name} />
         )}
 
         {/* Links */}
         {(project.demo_url || project.repo_url) && (
           <div className="mt-12 pt-8 border-t border-[#e5e5e5] flex flex-wrap gap-3">
             {project.demo_url && (
-              <a href={project.demo_url} target="_blank" rel="noopener noreferrer" className="btn-primary flex items-center gap-2">
+              <a href={project.demo_url} target="_blank" rel="noopener noreferrer" className="btn-primary min-h-11 flex items-center gap-2">
                 <ExternalLink className="h-4 w-4" />
                 Live Demo
               </a>
             )}
             {project.repo_url && (
-              <a href={project.repo_url} target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center gap-2">
+              <a href={project.repo_url} target="_blank" rel="noopener noreferrer" className="btn-secondary min-h-11 flex items-center gap-2">
                 <Code2 className="h-4 w-4" />
                 View Code
               </a>

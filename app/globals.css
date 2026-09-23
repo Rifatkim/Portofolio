@@ -140,9 +140,9 @@
     font-size: 0.875rem;
     letter-spacing: 0.03em;
     line-height: 1.25rem;
-    min-height: 2.625rem;
+    min-height: 2.75rem;
     box-sizing: border-box;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.15s ease, transform 0.15s ease;
     cursor: pointer;
     text-decoration: none;
     white-space: nowrap;
@@ -150,6 +150,10 @@
 
   .btn-primary:hover {
     opacity: 0.85;
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
   }
 
   .btn-secondary {
@@ -164,9 +168,9 @@
     font-size: 0.875rem;
     letter-spacing: 0.03em;
     line-height: 1.25rem;
-    min-height: 2.625rem;
+    min-height: 2.75rem;
     box-sizing: border-box;
-    transition: all 0.15s ease;
+    transition: all 0.15s ease, transform 0.15s ease;
     cursor: pointer;
     text-decoration: none;
     white-space: nowrap;
@@ -175,6 +179,10 @@
   .btn-secondary:hover {
     background-color: var(--foreground);
     color: var(--background);
+  }
+
+  .btn-secondary:active {
+    transform: scale(0.98);
   }
 
   /* Inverse buttons (for dark sections) */
@@ -189,13 +197,19 @@
     font-weight: 600;
     font-size: 0.875rem;
     letter-spacing: 0.03em;
-    transition: opacity 0.15s ease;
+    min-height: 2.75rem;
+    box-sizing: border-box;
+    transition: opacity 0.15s ease, transform 0.15s ease;
     cursor: pointer;
     text-decoration: none;
   }
 
   .btn-primary-inverse:hover {
     opacity: 0.9;
+  }
+
+  .btn-primary-inverse:active {
+    transform: scale(0.98);
   }
 
   .btn-secondary-inverse {
@@ -209,7 +223,9 @@
     font-weight: 600;
     font-size: 0.875rem;
     letter-spacing: 0.03em;
-    transition: all 0.15s ease;
+    min-height: 2.75rem;
+    box-sizing: border-box;
+    transition: all 0.15s ease, transform 0.15s ease;
     cursor: pointer;
     text-decoration: none;
   }
@@ -217,6 +233,10 @@
   .btn-secondary-inverse:hover {
     background-color: var(--background);
     color: var(--foreground);
+  }
+
+  .btn-secondary-inverse:active {
+    transform: scale(0.98);
   }
 
   /* Section number */
@@ -268,3 +288,15 @@
   from { transform: translateX(-50%); }
   to   { transform: translateX(0); }
 }
+
+/* ── Prefers Reduced Motion Protection ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  .animate-bounce,
+  .animate-pulse {
+    animation: none !important;
+  }
+}
+

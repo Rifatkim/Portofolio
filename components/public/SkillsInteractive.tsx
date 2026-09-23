@@ -38,7 +38,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
       onClick={onClick}
       className="
         group flex items-center justify-center shrink-0
-        w-8 h-8
+        min-w-11 min-h-11 w-11 h-11
         border border-white/25 text-white
         transition-all duration-[180ms] ease-out
         hover:bg-white hover:border-white
@@ -50,8 +50,8 @@ function BackButton({ onClick }: { onClick: () => void }) {
       {/* ArrowLeft icon (inline SVG, no external import needed) */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="15"
-        height="15"
+        width="16"
+        height="16"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -106,7 +106,7 @@ function SkillDetailPanel({
       {/* Body */}
       <div className="px-5 py-5 space-y-4">
         {/* Category */}
-        <p className="font-mono text-[10px] tracking-[0.18em] text-[#666] uppercase">
+        <p className="font-mono text-[10px] tracking-[0.18em] text-[#a3a3a3] uppercase">
           {categoryName}
         </p>
 
@@ -116,7 +116,7 @@ function SkillDetailPanel({
             {skill.description}
           </p>
         ) : (
-          <p className="text-sm text-[#555] italic">No description available.</p>
+          <p className="text-sm text-[#a3a3a3] italic">No description available.</p>
         )}
 
         {/* Bottom rule */}
@@ -217,7 +217,7 @@ export function SkillsCategoryRow({
       {/* Category label + skill pills row */}
       <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-6">
         <div className="pt-1">
-          <p className="text-mono text-[#a3a3a3] mb-1">
+          <p className="text-mono text-[#737373] mb-1">
             /{String(catIndex + 1).padStart(2, "0")}
           </p>
           <p className="text-sm font-bold uppercase tracking-wider">{categoryName}</p>
@@ -240,7 +240,7 @@ export function SkillsCategoryRow({
                 onClick={() => handleClick(skill)}
                 onKeyDown={(e) => handleKeyDown(e, skill)}
                 className={[
-                  "inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold uppercase tracking-wide border transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black",
+                  "inline-flex items-center gap-2 px-3 py-2 min-h-10 text-xs font-semibold uppercase tracking-wide border transition-all duration-150 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black",
                   isActive
                     ? "bg-foreground text-background border-foreground"
                     : "bg-white text-foreground border-[#e5e5e5] hover:border-foreground",
@@ -249,7 +249,7 @@ export function SkillsCategoryRow({
                 {skill.name}
                 {skill.level && (
                   <span
-                    className={`text-[10px] font-mono ${isActive ? "text-[#aaa]" : "text-[#a3a3a3]"}`}
+                    className={`text-[10px] font-mono ${isActive ? "text-[#aaa]" : "text-[#737373]"}`}
                   >
                     {LEVEL_CODE[skill.level]}
                   </span>
