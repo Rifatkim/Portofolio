@@ -31,7 +31,7 @@ export function HeroSection({ profile, siteTitle, showCvButton }: HeroSectionPro
           the 5 groups evenly with justify-between so SCROLL indicator sits at the bottom edge.
         - Desktop (lg+): retains original desktop bottom-anchored layout.
       */}
-      <div className="w-full flex-1 min-h-[calc(100svh-3.5rem)] lg:min-h-0 flex flex-col justify-between pt-1 sm:pt-2 pb-3 sm:pb-8 lg:pb-16 lg:justify-end lg:flex-none">
+      <div className="w-full flex-1 min-h-[calc(100svh-3.5rem)] lg:min-h-0 flex flex-col justify-between pt-5 sm:pt-6 pb-3 sm:pb-8 lg:pb-16 lg:justify-end lg:flex-none">
         {/* ── Group A: Hero Top ── */}
         <div className="flex items-center justify-between gap-3 pb-2 sm:pb-3 border-b border-[#e5e5e5] flex-wrap">
           <span className="text-label text-[#737373]">[00] Portfolio</span>
