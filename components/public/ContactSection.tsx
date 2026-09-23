@@ -21,8 +21,8 @@ export function ContactSection({ contacts, profile, enabled }: ContactSectionPro
   if (!enabled || contacts.length === 0) return null;
 
   return (
-    <section id="contact" className="bg-foreground text-background py-16 sm:py-20">
-      <div className="px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
+    <section id="contact" className="w-full bg-foreground text-background py-16 sm:py-20">
+      <div className="w-full px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
         {/* Section header */}
         <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b border-[#333]">
           <span className="text-mono text-[#555] mt-1 text-xs sm:text-sm">[06]</span>

@@ -29,12 +29,12 @@ export function SkillsSection({ categories, skills }: SkillsSectionProps) {
   ];
 
   return (
-    <section id="capabilities" className="bg-[#f7f7f5]">
+    <section id="capabilities" className="w-full bg-[#f7f7f5]">
       {/* ── Top Marquee (left → right) ───────────────────────────────── */}
       <TechnologyMarquee direction="left" durationMs={40000} />
 
       {/* ── CAPABILITIES Content ─────────────────────────────────────── */}
-      <div className="py-16 sm:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
+      <div className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
         {/* Section header */}
         <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-foreground">
           <span className="text-mono text-[#a3a3a3] mt-1 text-xs sm:text-sm">[02]</span>

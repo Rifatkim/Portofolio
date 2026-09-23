@@ -53,8 +53,11 @@
   }
 
   html {
-    overflow-x: clip;
+    overflow-x: hidden;
     scroll-behavior: smooth;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   body {
@@ -63,8 +66,11 @@
     font-family: var(--font-inter);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: clip;
+    overflow-x: hidden;
+    width: 100%;
     min-width: 320px;
+    margin: 0;
+    padding: 0;
   }
 
   /* Focus styles for accessibility */
@@ -129,13 +135,17 @@
     background-color: var(--foreground);
     color: var(--background);
     border: 1px solid var(--foreground);
-    padding: 0.625rem 1.5rem;
+    padding: 0.625rem 1.25rem;
     font-weight: 600;
     font-size: 0.875rem;
     letter-spacing: 0.03em;
+    line-height: 1.25rem;
+    min-height: 2.625rem;
+    box-sizing: border-box;
     transition: opacity 0.15s ease;
     cursor: pointer;
     text-decoration: none;
+    white-space: nowrap;
   }
 
   .btn-primary:hover {
@@ -149,13 +159,17 @@
     background-color: transparent;
     color: var(--foreground);
     border: 1px solid var(--foreground);
-    padding: 0.625rem 1.5rem;
+    padding: 0.625rem 1.25rem;
     font-weight: 600;
     font-size: 0.875rem;
     letter-spacing: 0.03em;
+    line-height: 1.25rem;
+    min-height: 2.625rem;
+    box-sizing: border-box;
     transition: all 0.15s ease;
     cursor: pointer;
     text-decoration: none;
+    white-space: nowrap;
   }
 
   .btn-secondary:hover {

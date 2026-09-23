@@ -52,7 +52,7 @@ export default async function HomePage() {
     <>
       <SiteNav siteTitle={profile?.full_name || settings.site_title} />
 
-      <main>
+      <main className="w-full overflow-x-hidden">
         <HeroSection
           profile={profile}
           siteTitle={settings.site_title}

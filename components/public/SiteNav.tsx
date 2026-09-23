@@ -76,11 +76,11 @@ export function SiteNav({ siteTitle }: { siteTitle: string }) {
           scrolled ? "shadow-[0_2px_12px_rgba(0,0,0,0.06)]" : ""
         )}
       >
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-between h-14 sm:h-16">
+        <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-between h-14 sm:h-16 gap-3">
           {/* Identity / Name Brand */}
           <Link
             href="/"
-            className="text-xs sm:text-sm font-bold uppercase tracking-[0.18em] text-black hover:opacity-75 transition-opacity truncate max-w-[220px] sm:max-w-none"
+            className="text-[11px] min-[360px]:text-xs sm:text-sm font-bold uppercase tracking-[0.1em] sm:tracking-[0.18em] text-black hover:opacity-75 transition-opacity leading-snug shrink"
           >
             {siteTitle}
           </Link>
@@ -113,7 +113,7 @@ export function SiteNav({ siteTitle }: { siteTitle: string }) {
           {/* Mobile / Tablet Hamburger Button (Garis Tiga) */}
           <button
             type="button"
-            className="lg:hidden flex items-center justify-center w-10 h-10 border border-[#e5e5e5] rounded-xs bg-white text-black hover:bg-[#f5f5f5] active:scale-95 transition-all"
+            className="lg:hidden shrink-0 flex items-center justify-center w-10 h-10 border border-[#e5e5e5] rounded-xs bg-white text-black hover:bg-[#f5f5f5] active:scale-95 transition-all"
             onClick={() => setMobileOpen(true)}
             aria-label="Buka navigasi menu"
             aria-expanded={mobileOpen}
@@ -134,14 +134,14 @@ export function SiteNav({ siteTitle }: { siteTitle: string }) {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Drawer Header */}
-            <div className="flex items-center justify-between px-5 h-16 border-b border-[#e5e5e5]">
-              <span className="text-xs font-bold uppercase tracking-[0.18em] text-black truncate max-w-[200px]">
+            <div className="flex items-center justify-between px-4 sm:px-5 h-14 sm:h-16 border-b border-[#e5e5e5] gap-3">
+              <span className="text-[11px] min-[360px]:text-xs sm:text-sm font-bold uppercase tracking-[0.1em] sm:tracking-[0.18em] text-black leading-snug shrink">
                 {siteTitle}
               </span>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center w-9 h-9 border border-[#e5e5e5] rounded-xs text-black hover:bg-[#f5f5f5] active:scale-95 transition-all"
+                className="shrink-0 flex items-center justify-center w-9 h-9 border border-[#e5e5e5] rounded-xs text-black hover:bg-[#f5f5f5] active:scale-95 transition-all"
                 aria-label="Tutup menu"
               >
                 <X className="h-5 w-5" />

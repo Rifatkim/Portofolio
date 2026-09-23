@@ -33,7 +33,7 @@ export function ProjectDetailHeader({
         isScrolled ? "border-b border-black" : "border-b border-[#e5e5e5]"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 h-16 flex items-center justify-between gap-4">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-16 flex items-center justify-between gap-4">
         {/* Left: Back Link & Optional Scrolled Project Name */}
         <div className="flex items-center gap-4 min-w-0">
           <Link

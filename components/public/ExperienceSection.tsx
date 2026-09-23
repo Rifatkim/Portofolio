@@ -19,7 +19,7 @@ export function ExperienceSection({ experiences }: ExperienceSectionProps) {
   if (experiences.length === 0) return null;
 
   return (
-    <section id="experience" className="py-16 sm:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
+    <section id="experience" className="w-full py-16 sm:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
       {/* Section header */}
       <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-foreground">
         <span className="text-mono text-[#a3a3a3] mt-1 text-xs sm:text-sm">[04]</span>

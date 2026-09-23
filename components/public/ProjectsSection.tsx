@@ -12,8 +12,8 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const rest = projects.filter((p) => !p.is_featured);
 
   return (
-    <section id="works" className="py-16 sm:py-20 bg-white text-black">
-      <div className="px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
+    <section id="works" className="w-full py-16 sm:py-20 bg-white text-black">
+      <div className="w-full px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
         {/* Section header */}
         <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b-2 border-black">
           <span className="text-mono text-[#a3a3a3] mt-1 text-xs sm:text-sm">[03]</span>
