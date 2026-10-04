@@ -73,7 +73,24 @@ export function SiteNav({ siteTitle }: { siteTitle: string }) {
 
   // Lock body scroll with iOS-safe scroll position restoration
   const scrollYRef = useRef(0);
-  const pendingTargetRef = useRef<string | null>(null);
+  const isNavigatingRef = useRef(false);
+
+  const restoreBodyScroll = useCallback((restorePreviousPosition: boolean) => {
+    if (typeof document === "undefined") return;
+    if (document.body.style.position === "fixed") {
+      const savedScrollY = scrollYRef.current;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+
+      if (restorePreviousPosition) {
+        window.scrollTo(0, savedScrollY);
+      } else {
+        window.scrollTo({ top: savedScrollY, behavior: "instant" as ScrollBehavior });
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (mobileOpen) {
@@ -87,27 +104,9 @@ export function SiteNav({ siteTitle }: { siteTitle: string }) {
       document.body.style.width = "100%";
       document.body.style.overflow = "hidden";
     } else {
-      // Restore body styles and scroll position
-      if (document.body.style.position === "fixed") {
-        const savedScrollY = scrollYRef.current;
-        const targetId = pendingTargetRef.current;
-        pendingTargetRef.current = null;
-
-        document.body.style.position = "";
-        document.body.style.top = "";
-        document.body.style.width = "";
-        document.body.style.overflow = "";
-
-        if (targetId) {
-          const el = document.getElementById(targetId);
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth" });
-          } else {
-            window.scrollTo(0, savedScrollY);
-          }
-        } else {
-          window.scrollTo(0, savedScrollY);
-        }
+      // Only restore previous scroll position if closed regularly (Close button, Escape, etc.)
+      if (!isNavigatingRef.current) {
+        restoreBodyScroll(true);
       }
     }
 
@@ -122,25 +121,71 @@ export function SiteNav({ siteTitle }: { siteTitle: string }) {
         window.scrollTo(0, savedScrollY);
       }
     };
-  }, [mobileOpen]);
+  }, [mobileOpen, restoreBodyScroll]);
 
-  // Close menu and restore focus to hamburger
+  // Close menu and restore focus to hamburger safely (for X button, Escape, etc.)
   const closeMobileMenu = useCallback(() => {
+    isNavigatingRef.current = false;
     setMobileOpen(false);
     setTimeout(() => {
-      hamburgerRef.current?.focus();
+      hamburgerRef.current?.focus({ preventScroll: true });
     }, 50);
   }, []);
 
-  const handleMobileNavClick = (targetId: string) => {
-    setActiveSection(targetId);
-    pendingTargetRef.current = targetId;
+  const handleMobileNavigation = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: string
+  ) => {
+    event.preventDefault();
+
+    // 1. Mark that drawer is closed due to navigation (not cancel/close)
+    isNavigatingRef.current = true;
     isClickScrollingRef.current = true;
+
+    // 2. Immediately update active section for responsive UI feedback
+    setActiveSection(sectionId);
+
+    // 3. Reset click-scrolling lockout after scroll animation settles
     if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     scrollTimeoutRef.current = setTimeout(() => {
       isClickScrollingRef.current = false;
-    }, 1000);
-    closeMobileMenu();
+    }, 1200);
+
+    // 4. Close mobile drawer
+    setMobileOpen(false);
+
+    // 5. Restore body scroll lock immediately so document becomes scrollable
+    restoreBodyScroll(false);
+
+    // 6. After layout reflows, smooth scroll to destination section
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (sectionId === "home") {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        } else {
+          const target = document.getElementById(sectionId);
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }
+
+        // 7. Update URL hash without page reload
+        if (typeof window !== "undefined" && window.history?.replaceState) {
+          window.history.replaceState(null, "", `#${sectionId}`);
+        }
+
+        // 8. Safely reset navigating flag after animation starts
+        setTimeout(() => {
+          isNavigatingRef.current = false;
+        }, 400);
+      });
+    });
   };
 
   // Focus first element when drawer opens & Focus Trap
@@ -306,10 +351,7 @@ export function SiteNav({ siteTitle }: { siteTitle: string }) {
                 <li key={link.href} className="w-full">
                   <a
                     href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleMobileNavClick(link.href.replace("#", ""));
-                    }}
+                    onClick={(e) => handleMobileNavigation(e, link.href.replace("#", ""))}
                     tabIndex={mobileOpen ? 0 : -1}
                     className={cn(
                       "mobile-drawer-link group flex items-center justify-between py-1.5 sm:py-2 border-b border-[#f0f0f0] transition-colors",
