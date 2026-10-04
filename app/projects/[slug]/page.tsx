@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { getProjectBySlug } from "@/lib/actions/projects.actions";
 import { formatDate } from "@/lib/utils";
-import { ExternalLink, Code2 } from "lucide-react";
 import { ProjectDetailHeader } from "@/components/public/ProjectDetailHeader";
 import { ProjectGallery } from "@/components/public/ProjectGallery";
 
@@ -26,15 +25,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   if (!project) notFound();
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <main className="min-h-screen bg-white text-black">
       {/* Sticky Project Navigation Header */}
       <ProjectDetailHeader
         projectTitle={project.name}
         demoUrl={project.demo_url}
         repoUrl={project.repo_url}
+        liveUrl={project.demo_url}
+        repositoryUrl={project.repo_url}
       />
 
-      <main className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-12 py-12 sm:py-16">
         {/* Header */}
         <div className="mb-12 pb-8 border-b-2 border-foreground">
           {project.category && (
@@ -151,25 +152,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {project.images && project.images.length > 0 && (
           <ProjectGallery images={project.images} projectName={project.name} />
         )}
-
-        {/* Links */}
-        {(project.demo_url || project.repo_url) && (
-          <div className="mt-12 pt-8 border-t border-[#e5e5e5] flex flex-wrap gap-3">
-            {project.demo_url && (
-              <a href={project.demo_url} target="_blank" rel="noopener noreferrer" className="btn-primary min-h-11 flex items-center gap-2">
-                <ExternalLink className="h-4 w-4" />
-                Live Demo
-              </a>
-            )}
-            {project.repo_url && (
-              <a href={project.repo_url} target="_blank" rel="noopener noreferrer" className="btn-secondary min-h-11 flex items-center gap-2">
-                <Code2 className="h-4 w-4" />
-                View Code
-              </a>
-            )}
-          </div>
-        )}
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

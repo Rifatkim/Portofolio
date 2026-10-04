@@ -35,6 +35,16 @@ export async function generateMetadata(): Promise<Metadata> {
     robots: settings.maintenance_mode
       ? { index: false, follow: false }
       : { index: true, follow: true },
+    icons: {
+      icon: [
+        { url: "/icon.png", type: "image/png" },
+        { url: "/logo.png", type: "image/png" },
+      ],
+      shortcut: ["/icon.png"],
+      apple: [
+        { url: "/apple-icon.png" },
+      ],
+    },
   };
 }
 
