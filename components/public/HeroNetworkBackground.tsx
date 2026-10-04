@@ -52,7 +52,6 @@ export function HeroNetworkBackground() {
     // State
     let animationFrameId: number;
     let isVisible = true;
-    let scrollOpacity = 1;
     let width = 0;
     let height = 0;
     let dpr = 1;
@@ -198,17 +197,7 @@ export function HeroNetworkBackground() {
       targetParallaxY = -relY * 10;
     };
 
-    // Scroll fade-out handler
-    const handleScroll = () => {
-      const rect = container.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      if (rect.bottom <= 0) {
-        scrollOpacity = 0;
-      } else {
-        // Linear fade as hero leaves screen
-        scrollOpacity = Math.max(0, Math.min(1, rect.bottom / (windowHeight * 0.75)));
-      }
-    };
+
 
     // Restart the rAF loop whenever the component becomes visible again
     const restartLoop = () => {
@@ -241,11 +230,9 @@ export function HeroNetworkBackground() {
 
     window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", handlePointerMove, { passive: true });
-    window.addEventListener("scroll", handleScroll, { passive: true });
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     handleResize();
-    handleScroll();
 
     // Helper: calculate edge point coordinates considering right-angle routing
     const getEdgePoints = (edge: Edge, px: number, py: number) => {
@@ -306,8 +293,6 @@ export function HeroNetworkBackground() {
       // Clear Canvas
       ctx.clearRect(0, 0, width, height);
 
-      if (scrollOpacity <= 0.01) return;
-
       // Parallax smooth interpolation (heavy feel lerp)
       if (!prefersReducedMotion) {
         currentParallaxX += (targetParallaxX - currentParallaxX) * 0.035;
@@ -315,7 +300,7 @@ export function HeroNetworkBackground() {
       }
 
       ctx.save();
-      ctx.globalAlpha = scrollOpacity;
+      ctx.globalAlpha = 1;
 
       // 1. Subtle Technical Grid (rgba(0, 0, 0, 0.025))
       const gridSize = 80;
@@ -485,7 +470,6 @@ export function HeroNetworkBackground() {
       observer.disconnect();
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handlePointerMove);
-      window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);

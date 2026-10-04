@@ -90,18 +90,22 @@
     width: 6px;
     height: 6px;
   }
+
   ::-webkit-scrollbar-track {
     background: var(--surface-secondary);
   }
+
   ::-webkit-scrollbar-thumb {
     background: #a3a3a3;
   }
+
   ::-webkit-scrollbar-thumb:hover {
     background: #737373;
   }
 }
 
 @layer utilities {
+
   /* Typography helpers */
   .font-editorial {
     font-weight: 700;
@@ -279,14 +283,24 @@
 
 /* Right-to-left: logos move leftward (standard marquee direction) */
 @keyframes marquee-rtl {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 /* Left-to-right: logos move rightward (reverse marquee direction) */
 @keyframes marquee-ltr {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 /* ── Prefers Reduced Motion Protection ─────────────────────────────────────── */
@@ -294,9 +308,9 @@
   html {
     scroll-behavior: auto !important;
   }
+
   .animate-bounce,
   .animate-pulse {
     animation: none !important;
   }
 }
-

@@ -98,6 +98,7 @@ function SkillDetailPanel({
         {/* Right: Level */}
         {skill.level && (
           <span className="font-mono text-[11px] tracking-[0.12em] text-white uppercase whitespace-nowrap shrink-0">
+            {LEVEL_CODE[skill.level] ? `${LEVEL_CODE[skill.level]} ` : ""}
             {LEVEL_DISPLAY[skill.level] || skill.level}
           </span>
         )}
@@ -207,7 +208,14 @@ export function SkillsCategoryRow({
   };
 
   const handleClose = () => {
+    const closingSkillId = activeSkill?.id;
     onSelect(null, category.id);
+    if (closingSkillId) {
+      setTimeout(() => {
+        const btn = document.getElementById(`skill-btn-${closingSkillId}`);
+        btn?.focus();
+      }, 50);
+    }
   };
 
   const categoryName = "name" in category ? category.name : "Other";
@@ -240,16 +248,23 @@ export function SkillsCategoryRow({
                 onClick={() => handleClick(skill)}
                 onKeyDown={(e) => handleKeyDown(e, skill)}
                 className={[
-                  "inline-flex items-center gap-2 px-3 py-2 min-h-10 text-xs font-semibold uppercase tracking-wide border transition-all duration-150 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black",
+                  "group/skill relative inline-flex items-center gap-2 px-3 py-2 min-h-11 text-xs font-semibold uppercase tracking-wide border cursor-pointer",
+                  "transition-colors duration-150",
+                  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black",
                   isActive
-                    ? "bg-foreground text-background border-foreground"
-                    : "bg-white text-foreground border-[#e5e5e5] hover:border-foreground",
+                    ? "bg-[#d4d4d4] text-[#000000] border-[#171717]"
+                    : "bg-white text-foreground border-[#e5e5e5] hover:bg-[#f5f5f5] hover:border-[#a3a3a3] active:bg-[#e5e5e5]",
                 ].join(" ")}
               >
                 {skill.name}
                 {skill.level && (
                   <span
-                    className={`text-[10px] font-mono ${isActive ? "text-[#aaa]" : "text-[#737373]"}`}
+                    className={[
+                      "text-[10px] font-mono transition-colors duration-150",
+                      isActive
+                        ? "text-[#404040] font-bold"
+                        : "text-[#737373] group-hover/skill:text-[#525252]",
+                    ].join(" ")}
                   >
                     {LEVEL_CODE[skill.level]}
                   </span>

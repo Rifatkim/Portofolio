@@ -229,30 +229,53 @@ export function TechnologyMarquee({
 }: TechnologyMarqueeProps) {
   const trackLogos = buildTrack(logoIds ?? (direction === "right" ? TOP_LOGOS : BOTTOM_LOGOS));
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
   const [prefersReduced, setPrefersReduced] = useState(false);
+  const [isInView, setIsInView] = useState(true);
+  const [isDocumentVisible, setIsDocumentVisible] = useState(true);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
     mq.addEventListener("change", handler);
-    // Set initial value via the handler (avoids synchronous setState in effect body)
     handler({ matches: mq.matches } as MediaQueryListEvent);
     return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  // Pause animation when tab/page is not visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsDocumentVisible(document.visibilityState === "visible");
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
+
+  // Pause animation when element is scrolled outside viewport
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
   }, []);
 
   // direction="right" means logos move right-to-left (from: 0 to: -50%)
   // direction="left"  means logos move left-to-right (from: -50% to: 0)
   const animName = direction === "right" ? "marquee-rtl" : "marquee-ltr";
-  const slowDuration = Math.round(durationMs * 1.55);
+  const shouldAnimate = !prefersReduced && isInView && isDocumentVisible;
 
   return (
     <div
       ref={containerRef}
       className={`relative w-full bg-black overflow-hidden h-[34px] sm:h-[36px] ${className}`}
       aria-hidden="true"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
       style={{
         maskImage:
           "linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)",
@@ -266,10 +289,10 @@ export function TechnologyMarquee({
         style={{
           width: "max-content",
           animationName: animName,
-          animationDuration: `${isPaused || prefersReduced ? slowDuration : durationMs}ms`,
+          animationDuration: `${durationMs}ms`,
           animationTimingFunction: "linear",
           animationIterationCount: "infinite",
-          animationPlayState: prefersReduced ? "paused" : "running",
+          animationPlayState: shouldAnimate ? "running" : "paused",
           willChange: "transform",
         }}
       >

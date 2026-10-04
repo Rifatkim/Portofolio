@@ -46,7 +46,7 @@ export function ContactSection({ contacts, profile, enabled }: ContactSectionPro
                 </p>
               )}
               <p className="text-sm text-[#737373] max-w-sm leading-relaxed">
-                Tersedia untuk project freelance, magang, kolaborasi, atau sekadar ngobrol soal teknologi.
+                Tersedia untuk project, magang, atau kolaborasi.
               </p>
             </div>
           </Reveal>
