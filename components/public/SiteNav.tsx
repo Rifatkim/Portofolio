@@ -205,15 +205,9 @@ export function SiteNav({ siteTitle }: { siteTitle: string }) {
           {/* Identity / Name Brand */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 text-[11px] min-[360px]:text-xs sm:text-sm font-bold uppercase tracking-[0.1em] sm:tracking-[0.18em] text-black hover:opacity-75 transition-opacity leading-snug shrink"
+            className="text-[11px] min-[360px]:text-xs sm:text-sm font-bold uppercase tracking-[0.1em] sm:tracking-[0.18em] text-black hover:opacity-75 transition-opacity leading-snug shrink"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo.png"
-              alt="Logo"
-              className="h-5 sm:h-6 w-auto object-contain shrink-0"
-            />
-            <span>{siteTitle}</span>
+            {siteTitle}
           </Link>
 
           {/* Desktop Navigation */}
@@ -282,17 +276,9 @@ export function SiteNav({ siteTitle }: { siteTitle: string }) {
       >
         {/* 1. Header (shrink-0) */}
         <div className="mobile-drawer-header shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 sm:h-16 border-b border-[#e5e5e5] gap-3">
-          <div className="flex items-center gap-2.5 min-w-0 shrink">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo.png"
-              alt="Logo"
-              className="h-5 sm:h-6 w-auto object-contain shrink-0"
-            />
-            <span className="text-[11px] min-[360px]:text-xs sm:text-sm font-bold uppercase tracking-[0.1em] sm:tracking-[0.18em] text-black leading-snug shrink truncate">
-              {siteTitle}
-            </span>
-          </div>
+          <span className="text-[11px] min-[360px]:text-xs sm:text-sm font-bold uppercase tracking-[0.1em] sm:tracking-[0.18em] text-black leading-snug shrink truncate">
+            {siteTitle}
+          </span>
           <button
             ref={closeButtonRef}
             type="button"
