@@ -12,6 +12,7 @@ import { SkillsSection } from "@/components/public/SkillsSection";
 import { ProjectsSection } from "@/components/public/ProjectsSection";
 import { ExperienceSection } from "@/components/public/ExperienceSection";
 import { CertificatesSection } from "@/components/public/CertificatesSection";
+import { FeaturedVideoSection } from "@/components/public/FeaturedVideoSection";
 import { ContactSection } from "@/components/public/ContactSection";
 import { Footer } from "@/components/public/Footer";
 
@@ -68,6 +69,8 @@ export default async function HomePage() {
         <ExperienceSection experiences={experiences} />
 
         <CertificatesSection certificates={certificates} />
+
+        <FeaturedVideoSection />
 
         <ContactSection
           contacts={contacts}

@@ -12,7 +12,8 @@ const NAV_LINKS = [
   { href: "#works", label: "Projects", code: "03" },
   { href: "#experience", label: "Experience", code: "04" },
   { href: "#certifications", label: "Certificates", code: "05" },
-  { href: "#contact", label: "Contact", code: "06" },
+  { href: "#featured-video", label: "Video", code: "06" },
+  { href: "#contact", label: "Contact", code: "07" },
 ];
 
 export function SiteNav({ siteTitle }: { siteTitle: string }) {
@@ -256,7 +257,7 @@ export function SiteNav({ siteTitle }: { siteTitle: string }) {
           </Link>
 
           {/* Desktop Navigation */}
-          <ul className="hidden lg:flex items-center gap-6 xl:gap-8">
+          <ul className="hidden lg:flex items-center gap-5 xl:gap-7">
             {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.href.replace("#", "");
               return (

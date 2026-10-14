@@ -28,7 +28,7 @@ export function ContactSection({ contacts, profile, enabled }: ContactSectionPro
         {/* Section header */}
         <Reveal>
           <div className="flex items-start gap-4 sm:gap-6 mb-8 sm:mb-12 pb-4 sm:pb-6 border-b border-[#e5e5e5]">
-            <span className="text-mono text-[#737373] mt-1 text-xs sm:text-sm">[06]</span>
+            <span className="text-mono text-[#737373] mt-1 text-xs sm:text-sm">[07]</span>
             <h2 className="font-editorial text-3xl sm:text-4xl lg:text-5xl uppercase text-black">CONTACT</h2>
           </div>
         </Reveal>
