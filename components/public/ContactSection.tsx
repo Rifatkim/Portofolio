@@ -1,23 +1,13 @@
 import { Contact } from "@/types";
 import { CopyEmailButton } from "./CopyEmailButton";
 import { Reveal } from "./Reveal";
+import { BrandIcon } from "./BrandIcon";
 
 interface ContactSectionProps {
   contacts: Contact[];
   profile: { full_name?: string | null } | null;
   enabled: boolean;
 }
-
-const ICON_MAP: Record<string, string> = {
-  email: "✉",
-  whatsapp: "💬",
-  github: "⌨",
-  linkedin: "in",
-  instagram: "◻",
-  twitter: "✕",
-  youtube: "▶",
-  telegram: "✈",
-};
 
 export function ContactSection({ contacts, profile, enabled }: ContactSectionProps) {
   if (!enabled || contacts.length === 0) return null;
@@ -56,6 +46,7 @@ export function ContactSection({ contacts, profile, enabled }: ContactSectionPro
             {contacts.map((contact, i) => {
               const isEmail =
                 contact.platform.toLowerCase() === "email" ||
+                contact.platform.toLowerCase() === "gmail" ||
                 contact.platform.toLowerCase() === "mail";
               const emailAddress = contact.value || contact.display_label;
               const emailMailto = contact.url?.startsWith("mailto:")
@@ -70,9 +61,12 @@ export function ContactSection({ contacts, profile, enabled }: ContactSectionPro
                     } group`}
                   >
                     <div className="flex items-center gap-4">
-                      <span className="text-mono text-[#737373] w-4 text-center shrink-0">
-                        {contact.icon || ICON_MAP[contact.platform.toLowerCase()] || "·"}
-                      </span>
+                      <div className="flex h-6 w-6 sm:h-7 sm:w-7 shrink-0 items-center justify-center text-black">
+                        <BrandIcon
+                          platform={contact.platform}
+                          className="h-5 w-5 shrink-0 text-black transition-transform duration-150 group-hover:translate-x-0.5"
+                        />
+                      </div>
                       <div>
                         <p className="text-[10px] font-bold uppercase tracking-widest text-[#737373] mb-0.5">
                           {contact.platform}

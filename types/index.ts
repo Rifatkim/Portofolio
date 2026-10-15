@@ -207,6 +207,21 @@ export interface Certificate {
   updated_at: string;
 }
 
+// ===================== AWARDS =====================
+export interface Award {
+  id: string;
+  placement: string;
+  title: string;
+  award_month: string;
+  image_url: string;
+  is_published: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export type AwardInput = Omit<Award, "id" | "created_at" | "updated_at">;
+
 // ===================== CONTACTS =====================
 export interface Contact {
   id: string;
@@ -268,6 +283,7 @@ export interface DashboardStats {
   totalExperiences: number;
   totalSkills: number;
   totalCertificates: number;
+  totalAwards?: number;
   totalMedia: number;
   lastUpdated: string | null;
 }

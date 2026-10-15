@@ -3,6 +3,7 @@ import { getSkillCategories, getSkills } from "@/lib/actions/skills.actions";
 import { getProjects } from "@/lib/actions/projects.actions";
 import { getExperiences } from "@/lib/actions/experiences.actions";
 import { getCertificates } from "@/lib/actions/certificates.actions";
+import { getAwards } from "@/lib/actions/awards.actions";
 import { getContacts } from "@/lib/actions/contacts.actions";
 import { getSiteSettings } from "@/lib/actions/settings.actions";
 import { SiteNav } from "@/components/public/SiteNav";
@@ -11,7 +12,7 @@ import { ProfileSection } from "@/components/public/ProfileSection";
 import { SkillsSection } from "@/components/public/SkillsSection";
 import { ProjectsSection } from "@/components/public/ProjectsSection";
 import { ExperienceSection } from "@/components/public/ExperienceSection";
-import { CertificatesSection } from "@/components/public/CertificatesSection";
+import { AchievementsSection } from "@/components/public/AchievementsSection";
 import { FeaturedVideoSection } from "@/components/public/FeaturedVideoSection";
 import { ContactSection } from "@/components/public/ContactSection";
 import { Footer } from "@/components/public/Footer";
@@ -25,6 +26,7 @@ export default async function HomePage() {
     projects,
     experiences,
     certificates,
+    awards,
     contacts,
   ] = await Promise.all([
     getProfile(),
@@ -34,6 +36,7 @@ export default async function HomePage() {
     getProjects(),
     getExperiences(),
     getCertificates(),
+    getAwards(),
     getContacts(),
   ]);
 
@@ -68,7 +71,7 @@ export default async function HomePage() {
 
         <ExperienceSection experiences={experiences} />
 
-        <CertificatesSection certificates={certificates} />
+        <AchievementsSection certificates={certificates} awards={awards} />
 
         <FeaturedVideoSection />
 

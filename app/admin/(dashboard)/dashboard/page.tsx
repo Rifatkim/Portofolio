@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getDashboardStats } from "@/lib/actions/settings.actions";
 import { PageHeader, Card } from "@/components/ui/shared";
-import { FolderKanban, Briefcase, Code2, Award, ImageIcon } from "lucide-react";
+import { FolderKanban, Briefcase, Code2, Award, Trophy, ImageIcon } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 export const metadata = { title: "Dashboard" };
@@ -16,6 +16,7 @@ export default async function AdminDashboardPage() {
     { label: "Total Experiences", value: stats.totalExperiences, sub: null, icon: Briefcase },
     { label: "Total Skills", value: stats.totalSkills, sub: null, icon: Code2 },
     { label: "Total Certificates", value: stats.totalCertificates, sub: null, icon: Award },
+    { label: "Total Awards", value: stats.totalAwards ?? 0, sub: null, icon: Trophy },
     { label: "Total Media", value: stats.totalMedia, sub: "files", icon: ImageIcon },
   ];
 
@@ -23,6 +24,7 @@ export default async function AdminDashboardPage() {
     { label: "+ Add Project", href: "/admin/projects/new" },
     { label: "+ Add Experience", href: "/admin/experiences/new" },
     { label: "+ Add Certificate", href: "/admin/certificates/new" },
+    { label: "+ Add Award", href: "/admin/awards/new" },
     { label: "+ Add Skill", href: "/admin/skills" },
     { label: "Upload Media", href: "/admin/media" },
     { label: "View Portfolio", href: "/", external: true },

@@ -47,3 +47,13 @@ export function getInitials(name: string): string {
     .join("")
     .toUpperCase();
 }
+
+export function formatAwardMonth(monthStr: string | null, uppercase = true): string {
+  if (!monthStr) return "";
+  const [yearStr, monthNum] = monthStr.split("-");
+  if (!yearStr || !monthNum) return monthStr;
+  const date = new Date(parseInt(yearStr, 10), parseInt(monthNum, 10) - 1, 1);
+  const formatted = date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  return uppercase ? formatted.toUpperCase() : formatted;
+}
+

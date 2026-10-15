@@ -11,7 +11,7 @@ const NAV_LINKS = [
   { href: "#capabilities", label: "Capabilities", code: "02" },
   { href: "#works", label: "Projects", code: "03" },
   { href: "#experience", label: "Experience", code: "04" },
-  { href: "#certifications", label: "Certificates", code: "05" },
+  { href: "#achievements", label: "Achievements", code: "05" },
   { href: "#featured-video", label: "Video", code: "06" },
   { href: "#contact", label: "Contact", code: "07" },
 ];

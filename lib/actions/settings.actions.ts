@@ -78,6 +78,7 @@ export async function getDashboardStats() {
     { count: totalExperiences },
     { count: totalSkills },
     { count: totalCertificates },
+    { count: totalAwards },
     { count: totalMedia },
   ] = await Promise.all([
     supabase.from("projects").select("*", { count: "exact", head: true }),
@@ -86,6 +87,7 @@ export async function getDashboardStats() {
     supabase.from("experiences").select("*", { count: "exact", head: true }),
     supabase.from("skills").select("*", { count: "exact", head: true }),
     supabase.from("certificates").select("*", { count: "exact", head: true }),
+    supabase.from("awards").select("*", { count: "exact", head: true }),
     supabase.from("media").select("*", { count: "exact", head: true }),
   ]);
 
@@ -103,6 +105,7 @@ export async function getDashboardStats() {
     totalExperiences: totalExperiences ?? 0,
     totalSkills: totalSkills ?? 0,
     totalCertificates: totalCertificates ?? 0,
+    totalAwards: totalAwards ?? 0,
     totalMedia: totalMedia ?? 0,
     lastUpdated: lastProject?.updated_at ?? null,
   };
